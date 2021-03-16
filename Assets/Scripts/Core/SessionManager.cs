@@ -7,7 +7,7 @@ namespace Core
 {
     public class SessionManager : MonoBehaviour
     {
-        [SerializeField] private GameObject[] trialObjects;
+        [SerializeField] private GameObject trialsParent;
         [SerializeField] private int numTrials;
 
         private ITrial[] customTrials;
@@ -19,13 +19,9 @@ namespace Core
         {
             trialCount = 0;
             trialData = new Dictionary<ITrial, UXFDataTable>();
-            customTrials = new ITrial[trialObjects.Length];
+            customTrials = trialsParent.GetComponentsInChildren<ITrial>(true);
             var block = session.CreateBlock();
             block.CreateTrial();
-            for(var i = 0; i < trialObjects.Length; i++)
-            {
-                customTrials[i] = trialObjects[i].GetComponent<ITrial>();
-            }
             session.BeginNextTrial();
         }
 

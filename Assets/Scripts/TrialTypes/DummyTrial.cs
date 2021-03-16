@@ -8,7 +8,6 @@ namespace TrialTypes
     public class DummyTrial : MonoBehaviour, ITrial
     {
         [SerializeField] private float waitTimeSeconds;
-        [SerializeField] private string trialName;
 
         private int clickCount;
         private static readonly string[] ColumnNames = {"ClickCount"};
@@ -23,7 +22,7 @@ namespace TrialTypes
 
         public string GetTrialName()
         {
-            return trialName;
+            return gameObject.name;
         }
 
         public string[] GetColumnNames()
