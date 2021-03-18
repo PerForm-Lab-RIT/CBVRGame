@@ -12,4 +12,14 @@ public static class Utility
             v.x * Mathf.Sin(angleRadians) + v.y * Mathf.Cos(angleRadians)
         );
     }
+
+    public static float ToDegrees(float radians)
+    {
+        return radians * 180 / Mathf.PI;
+    }
+
+    public static float ToRadians(float degrees)
+    {
+        return (Mathf.PI / 180) * degrees;
+    }
 }
