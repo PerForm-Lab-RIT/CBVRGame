@@ -81,6 +81,7 @@ namespace TrialTypes
 
             if (!falseAlarm && !trialSuccessful)
                 timedOut = true;
+            gameObject.SetActive(false);
         }
 
         private IEnumerator WaitForTarget(float waitTime)

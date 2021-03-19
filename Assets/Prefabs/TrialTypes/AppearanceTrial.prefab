@@ -50,6 +50,8 @@ MonoBehaviour:
   minTargetPresentationTime: 0.5
   maxTargetPresentationTime: 3
   targetTimeout: 1
+  distanceFromCenterDegrees: 0
+  polarAngle: 0
   fixationDot: {fileID: 7881952022461118866}
   fixationDotRadiusDegrees: 0
   fixationDotMaterial: {fileID: 2100000, guid: baca09fe63c88164f83e3d21c528fb2d, type: 2}
@@ -57,6 +59,9 @@ MonoBehaviour:
   maxFixationError: 0.1
   trialPlane: {fileID: 7458107754257625479}
   trialPlaneDepth: 2
+  reactionAction:
+    actionPath: 
+    needsReinit: 0
 --- !u!1 &6728034766232250848
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +80,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8093650608503677994
 Transform:
   m_ObjectHideFlags: 0

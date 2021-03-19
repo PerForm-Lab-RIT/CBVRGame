@@ -11,6 +11,8 @@ namespace Core
         [SerializeField] private int numTrials;
 
         private ITrial[] customTrials;
+        private ITrial[] trialSequence;
+        
         private Dictionary<ITrial, UXFDataTable> trialData;
         private ITrial currentTrial;
         private int trialCount;
@@ -20,6 +22,7 @@ namespace Core
             trialCount = 0;
             trialData = new Dictionary<ITrial, UXFDataTable>();
             customTrials = trialsParent.GetComponentsInChildren<ITrial>(true);
+            GenerateTrialSequence();
             var block = session.CreateBlock();
             block.CreateTrial();
             session.BeginNextTrial();
@@ -33,7 +36,7 @@ namespace Core
     
         private IEnumerator TrialRoutine(Trial uxfTrial)
         {
-            currentTrial = customTrials[Random.Range(0, customTrials.Length)];
+            currentTrial = trialSequence[trialCount];
             yield return currentTrial.Perform();
             trialCount++;
             uxfTrial.End();
@@ -66,6 +69,28 @@ namespace Core
         public void EndSession()
         {
             return;
+        }
+        
+        private void GenerateTrialSequence()
+        {
+            trialSequence = new ITrial[numTrials];
+            var trialsPerType = numTrials / customTrials.Length;
+
+            var index = 0;
+            foreach (var trialType in customTrials)
+            {
+                for (var j = 0; j < trialsPerType; j++)
+                {
+                    trialSequence[index] = trialType;
+                    index++;
+                }
+            }
+
+            // Fill the last empty space if odd number of trials
+            if (numTrials % 2 != 0)
+                trialSequence[trialSequence.Length - 1] = customTrials[Random.Range(0, customTrials.Length)];
+            
+            trialSequence.Shuffle();
         }
     }
 }
