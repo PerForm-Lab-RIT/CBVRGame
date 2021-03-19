@@ -35,5 +35,11 @@ namespace Core
                  * Retrieve the names of the data columns for this trial.
                  */
                 string[] GetColumnNames();
+
+                /*
+                 * Function: GetPromptText
+                 * Get the desired prompt text for display.
+                 */
+                string GetPromptText();
         }
 }

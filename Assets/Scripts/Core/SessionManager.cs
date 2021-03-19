@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UXF;
 
@@ -8,7 +9,9 @@ namespace Core
     public class SessionManager : MonoBehaviour
     {
         [SerializeField] private GameObject trialsParent;
+        [SerializeField] private float promptTime;
         [SerializeField] private int numTrials;
+        [SerializeField] private TextMeshPro promptText;
 
         private ITrial[] customTrials;
         private ITrial[] trialSequence;
@@ -16,6 +19,7 @@ namespace Core
         private Dictionary<ITrial, UXFDataTable> trialData;
         private ITrial currentTrial;
         private int trialCount;
+        
     
         public void BeginSession(Session session)
         {
@@ -37,6 +41,11 @@ namespace Core
         private IEnumerator TrialRoutine(Trial uxfTrial)
         {
             currentTrial = trialSequence[trialCount];
+            
+            ShowPrompt();
+            yield return new WaitForSeconds(promptTime);
+            HidePrompt();
+            
             yield return currentTrial.Perform();
             trialCount++;
             uxfTrial.End();
@@ -66,6 +75,17 @@ namespace Core
             }
         }
 
+        private void ShowPrompt()
+        {
+            promptText.renderer.enabled = true;
+            promptText.text = currentTrial.GetPromptText();
+        }
+
+        private void HidePrompt()
+        {
+            promptText.renderer.enabled = false;
+        }
+
         public void EndSession()
         {
             return;
@@ -86,7 +106,7 @@ namespace Core
                 }
             }
 
-            // Fill the last empty space if odd number of trials
+            // Fill the last empty space randomly if odd number of trials
             if (numTrials % 2 != 0)
                 trialSequence[trialSequence.Length - 1] = customTrials[Random.Range(0, customTrials.Length)];
             

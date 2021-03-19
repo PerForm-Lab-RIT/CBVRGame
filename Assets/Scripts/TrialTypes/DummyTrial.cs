@@ -30,6 +30,11 @@ namespace TrialTypes
             return ColumnNames;
         }
 
+        public string GetPromptText()
+        {
+            return "Click!";
+        }
+
         public UXFDataRow RetrieveTrialData()
         {
             var row = new UXFDataRow {(ColumnNames[0], clickCount)};

@@ -89,6 +89,7 @@ namespace TrialTypes
             if (!falseAlarm && !trialSuccessful)
                 timedOut = true;
             gameObject.SetActive(false);
+            fixationDot.SetActive(false);
         }
 
         private IEnumerator WaitForTarget(float waitTime)
@@ -134,6 +135,11 @@ namespace TrialTypes
         public string[] GetColumnNames()
         {
             return ColumnNames;
+        }
+
+        public string GetPromptText()
+        {
+            return "React!";
         }
 
         public UXFDataRow RetrieveTrialData()

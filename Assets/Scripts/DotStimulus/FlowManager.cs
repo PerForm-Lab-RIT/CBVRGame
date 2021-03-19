@@ -16,8 +16,8 @@ namespace DotStimulus
         [SerializeField] private bool enableHotUpdate;
 
         [Header("Velocity variance")]
-        [SerializeField] private float maxPitch;
-        [SerializeField] private float maxYaw;
+        [SerializeField] private float maxPitchVariance;
+        [SerializeField] private float maxYawVariance;
         
         private int oldNumDots;
         private float oldDensity;
@@ -26,7 +26,7 @@ namespace DotStimulus
         private float oldLifetime;
         
         private Dot[] dots;
-        private DotShaderData _shaderData;
+        private DotShaderData shaderData;
         
         [SerializeField] private Bounds bounds;
         private static readonly int ShaderProperties = Shader.PropertyToID("_Properties");
@@ -43,10 +43,10 @@ namespace DotStimulus
             dotMeshMaterial = new Material(dotMeshMaterial);
             numDots = Mathf.RoundToInt(density * bounds.extents.x * bounds.extents.y * bounds.extents.z);
             GenerateDots();
-            _shaderData?.ClearBuffers();
+            shaderData?.ClearBuffers();
             
             if(numDots > 0)
-                _shaderData = new DotShaderData(dotMesh, numDots);
+                shaderData = new DotShaderData(dotMesh, numDots);
             
             oldNumDots = numDots;
             oldDensity = density;
@@ -65,13 +65,13 @@ namespace DotStimulus
             for(var i = 0; i < dots.Length; i++)
             {
                 dots[i].UpdateDot();
-                _shaderData.UpdateMeshPropertiesBuffer(dots, transform, i);
+                shaderData.UpdateMeshPropertiesBuffer(dots, transform, i);
             }
         
-            var meshPropertiesBuffer = _shaderData.MeshPropertiesBuffer;
-            meshPropertiesBuffer.SetData(_shaderData.MeshProps);
+            var meshPropertiesBuffer = shaderData.MeshPropertiesBuffer;
+            meshPropertiesBuffer.SetData(shaderData.MeshProps);
             dotMeshMaterial.SetBuffer(ShaderProperties, meshPropertiesBuffer);
-            Graphics.DrawMeshInstancedIndirect(dotMesh, 0, dotMeshMaterial, bounds, _shaderData.ArgsBuffer);
+            Graphics.DrawMeshInstancedIndirect(dotMesh, 0, dotMeshMaterial, bounds, shaderData.ArgsBuffer);
         }
 
         private bool HasChanged()
@@ -107,7 +107,7 @@ namespace DotStimulus
                     Random.Range(boundsMin.z / 2, boundsMax.z / 2));
 
                 var velocityRotation =
-                    Quaternion.Euler(Random.Range(-maxPitch, maxPitch), Random.Range(-maxYaw, maxYaw), 0);
+                    Quaternion.Euler(Random.Range(-maxPitchVariance, maxPitchVariance), Random.Range(-maxYawVariance, maxYawVariance), 0);
                 var randomVelocity = velocityRotation * Vector3.forward * speed;
 
                 dots[i] = new Dot(randomVelocity, 
@@ -118,12 +118,12 @@ namespace DotStimulus
         
         public void OnDestroy()
         {
-            _shaderData.ClearBuffers();
+            shaderData.ClearBuffers();
         }
 
         public void OnApplicationQuit()
         {
-            _shaderData.ClearBuffers();
+            shaderData.ClearBuffers();
         }
 
         public void OnDrawGizmosSelected()
