@@ -46,6 +46,10 @@ namespace TrialTypes
         [Header("Input")] 
         [SerializeField] private SteamVR_Action_Boolean reactionAction;
 
+        [Header("Audio")] 
+        [SerializeField] private bool enableSound;
+        [SerializeField] private AudioSource reactionSound;
+        
         private IEyeTracker eyeTracker;
         private bool wasFixationBroken;
         private bool trialSuccessful;
@@ -56,7 +60,7 @@ namespace TrialTypes
         private bool timedOut;
 
         private float reactionTime;
-        private static readonly string[] s_ColumnNames = { "ReactionTime", "FalseAlarm", "TimedOut" };
+        private static readonly string[] ColumnNames = { "ReactionTime", "FalseAlarm", "TimedOut" };
 
         public IEnumerator Perform()
         {
@@ -69,6 +73,9 @@ namespace TrialTypes
             if (!falseAlarm)
             {
                 ShowTarget();
+                if(enableSound)
+                    reactionSound.Play();
+                
                 canReact = true;
                 yield return CheckFixationBreakWithDelay();
                 canReact = false;
@@ -126,15 +133,15 @@ namespace TrialTypes
 
         public string[] GetColumnNames()
         {
-            return s_ColumnNames;
+            return ColumnNames;
         }
 
         public UXFDataRow RetrieveTrialData()
         {
             var reactionTimeString = trialSuccessful ? reactionTime.ToString(CultureInfo.InvariantCulture) : "NA";
-            return new UXFDataRow {(s_ColumnNames[0], reactionTimeString), 
-                (s_ColumnNames[1], falseAlarm), 
-                (s_ColumnNames[2], timedOut)};
+            return new UXFDataRow {(ColumnNames[0], reactionTimeString), 
+                (ColumnNames[1], falseAlarm), 
+                (ColumnNames[2], timedOut)};
         }
         
         private void Initialize()
@@ -170,7 +177,8 @@ namespace TrialTypes
             while (timeFixated < fixationTime)
             {
                 timeFixated += Time.deltaTime;
-                if (Physics.Raycast(cameraTransform.position, cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), out var hit))
+                if (Physics.Raycast(cameraTransform.position, 
+                    cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), out var hit))
                 {
                     Debug.DrawRay(cameraTransform.position, hit.distance * cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), Color.yellow);
                     if ((hit.point - fixationDot.transform.position).magnitude > maxFixationError)

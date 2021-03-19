@@ -1,7 +1,5 @@
 ﻿using System;
-using ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace DotStimulus
@@ -16,6 +14,10 @@ namespace DotStimulus
         [SerializeField] private float speed;
         [SerializeField] private float lifetime;
         [SerializeField] private bool enableHotUpdate;
+
+        [Header("Velocity variance")]
+        [SerializeField] private float maxPitch;
+        [SerializeField] private float maxYaw;
         
         private int oldNumDots;
         private float oldDensity;
@@ -103,7 +105,10 @@ namespace DotStimulus
                 var randomPosition = new Vector3(Random.Range(boundsMin.x / 2, boundsMax.x / 2), 
                     Random.Range(boundsMin.y / 2, boundsMax.y / 2), 
                     Random.Range(boundsMin.z / 2, boundsMax.z / 2));
-                var randomVelocity = Vector3.forward * speed;
+
+                var velocityRotation =
+                    Quaternion.Euler(Random.Range(-maxPitch, maxPitch), Random.Range(-maxYaw, maxYaw), 0);
+                var randomVelocity = velocityRotation * Vector3.forward * speed;
 
                 dots[i] = new Dot(randomVelocity, 
                     new Vector3(randomPosition.x, randomPosition.y, randomPosition.z),
