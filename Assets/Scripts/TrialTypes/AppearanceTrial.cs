@@ -186,7 +186,9 @@ namespace TrialTypes
                 if (Physics.Raycast(cameraTransform.position, 
                     cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), out var hit))
                 {
-                    Debug.DrawRay(cameraTransform.position, hit.distance * cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), Color.yellow);
+                    var drawVector = hit.distance *
+                                     cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection());
+                    Debug.DrawRay(cameraTransform.position, drawVector, Color.yellow);
                     if ((hit.point - fixationDot.transform.position).magnitude > maxFixationError)
                         timeFixated = 0.0f;
                 }
