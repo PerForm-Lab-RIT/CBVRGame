@@ -38,7 +38,7 @@ namespace Core
 
                 /*
                  * Function: GetPromptText
-                 * Get the desired prompt text for display.
+                 * Get the desired prompt text for display by a SessionManager.
                  */
                 string GetPromptText();
         }

@@ -16,10 +16,10 @@ namespace Pointer
         {
             pointer = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             pointer.name = PointerObjectName;
+            pointer.transform.SetParent(transform);
             pointer.transform.localScale = new Vector3(thickness, thickness, DefaultDistance);
             pointer.transform.localPosition = new Vector3(0f, 0f, DefaultDistance / 2f);
-            pointer.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            pointer.transform.SetParent(transform);
+            pointer.transform.localRotation = Quaternion.Euler(-90, 0, 0);
             pointer.GetComponent<MeshRenderer>().material = pointerMaterial;
             var pointerCollider = pointer.GetComponent<CapsuleCollider>();
             Destroy(pointerCollider);

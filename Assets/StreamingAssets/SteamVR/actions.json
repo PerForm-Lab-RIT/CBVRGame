@@ -9,6 +9,10 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/Analog",
+      "type": "vector2"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     }

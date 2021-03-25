@@ -13,6 +13,7 @@ namespace TrialTypes
     {
         [SerializeField] private SelectEyeTracker eyeTrackerSelector;
         [SerializeField] private Transform cameraTransform;
+        [SerializeField] private string promptText;
 
         [Header("Stimulus")] 
         [SerializeField] private GameObject targetObject;
@@ -45,11 +46,13 @@ namespace TrialTypes
 
         [Header("Input")] 
         [SerializeField] private SteamVR_Action_Boolean reactionAction;
+        [SerializeField] private bool enableLaserInputMode;
+        [SerializeField] private ActiveLaserManager laserManager;
 
         [Header("Audio")] 
         [SerializeField] private bool enableSound;
         [SerializeField] private AudioSource reactionSound;
-        
+
         private IEyeTracker eyeTracker;
         private bool wasFixationBroken;
         private bool trialSuccessful;
@@ -61,6 +64,7 @@ namespace TrialTypes
 
         private float reactionTime;
         private static readonly string[] ColumnNames = { "ReactionTime", "FalseAlarm", "TimedOut" };
+        private Transform controllerTransform;
 
         public IEnumerator Perform()
         {
@@ -104,9 +108,15 @@ namespace TrialTypes
             }
         }
         
+        private void UpdateControllerTransform()
+        {
+            controllerTransform = laserManager.GetActiveHandTransform();
+        }
+        
         public void OnEnable()
         {
             reactionAction.onStateDown += OnConfirmAction;
+            UpdateControllerTransform();
         }
 
         public void OnDisable()
@@ -116,6 +126,9 @@ namespace TrialTypes
         
         private void OnConfirmAction(SteamVR_Action_Boolean action, SteamVR_Input_Sources source)
         {
+            // Alternate input mode in use;
+            if (enableLaserInputMode) return;
+            
             if (canReact)
                 trialSuccessful = true;
             else if (!trialOver)
@@ -139,7 +152,7 @@ namespace TrialTypes
 
         public string GetPromptText()
         {
-            return "React!";
+            return promptText;
         }
 
         public UXFDataRow RetrieveTrialData()
@@ -183,19 +196,31 @@ namespace TrialTypes
             while (timeFixated < fixationTime)
             {
                 timeFixated += Time.deltaTime;
+                
                 if (Physics.Raycast(cameraTransform.position, 
-                    cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), out var hit))
+                    cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection()), out var gazeHit))
                 {
-                    var drawVector = hit.distance *
+                    var drawVector = gazeHit.distance *
                                      cameraTransform.TransformDirection(eyeTracker.GetLocalGazeDirection());
                     Debug.DrawRay(cameraTransform.position, drawVector, Color.yellow);
-                    if ((hit.point - fixationDot.transform.position).magnitude > maxFixationError)
+                    if ((gazeHit.point - fixationDot.transform.position).magnitude > maxFixationError)
                         timeFixated = 0.0f;
                 }
-                else
+
+                if (enableLaserInputMode)
                 {
-                    timeFixated = 0.0f;
+                    if (Physics.Raycast(controllerTransform.position,
+                        controllerTransform.forward, out var controllerHit))
+                    {
+                        if ((controllerHit.point - fixationDot.transform.position).magnitude > maxFixationError)
+                            timeFixated = 0.0f;
+                    }
+                    else
+                    {
+                        timeFixated = 0.0f;
+                    }
                 }
+
                 yield return null;
             }
         }
@@ -217,6 +242,16 @@ namespace TrialTypes
                         targetObject.SetActive(false);
                         wasFixationBroken = true;
                         break;
+                    }
+                }
+                
+                if (enableLaserInputMode)
+                {
+                    if (Physics.Raycast(controllerTransform.position,
+                        controllerTransform.forward, out var controllerHit))
+                    {
+                        if (controllerHit.collider.gameObject == targetObject)
+                            trialSuccessful = true;
                     }
                 }
 

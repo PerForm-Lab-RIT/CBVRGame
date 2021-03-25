@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ScriptableObjects;
+using UnityEngine;
 using Valve.VR;
 
 public class ActiveLaserManager : MonoBehaviour
@@ -9,6 +10,8 @@ public class ActiveLaserManager : MonoBehaviour
     [SerializeField] private SteamVR_Action_Vector2 angleSelectAction;
     [SerializeField] private SteamVR_Action_Boolean confirmAction;
     [SerializeField] private FloatReference deadzone;
+
+    [SerializeField] private GameEvent onControllerChange;
 
     private GameObject _activeLaser;
     private bool _deactivated;
@@ -28,11 +31,15 @@ public class ActiveLaserManager : MonoBehaviour
         GameObject inactiveLaser;
         if (source == SteamVR_Input_Sources.RightHand)
         {
+            if(!_deactivated && _activeLaser != rightHandPointer)
+                onControllerChange.Raise();
             _activeLaser = rightHandPointer;
             inactiveLaser = leftHandPointer;
         }
         else
         {
+            if(!_deactivated && _activeLaser != leftHandPointer)
+                onControllerChange.Raise();
             _activeLaser = leftHandPointer;
             inactiveLaser = rightHandPointer;
         }
@@ -53,11 +60,15 @@ public class ActiveLaserManager : MonoBehaviour
 
         if (source == SteamVR_Input_Sources.RightHand)
         {
+            if(!_deactivated && _activeLaser != rightHandPointer)
+                onControllerChange.Raise();
             _activeLaser = rightHandPointer;
             inactiveLaser = leftHandPointer;
         }
         else
         {
+            if(!_deactivated && _activeLaser != leftHandPointer)
+                onControllerChange.Raise();
             _activeLaser = leftHandPointer;
             inactiveLaser = rightHandPointer;
         }
@@ -76,19 +87,17 @@ public class ActiveLaserManager : MonoBehaviour
         _deactivated = true;
     }
 
+    public Transform GetActiveHandTransform()
+    {
+        return _activeLaser.GetComponentInParent<Transform>();
+    }
+
     public void ActivateLaser()
     {
         _activeLaser.SetActive(true);
         _deactivated = false;
     }
 
-    public Transform GetActiveSelectionTransform()
-    {
-        // LaserPointer prefab should have the selection circle as its only immediate child
-        var selectionTransform = _activeLaser.gameObject.transform.GetChild(0);
-        return selectionTransform;
-    }
-    
     public void OnDisable()
     {
         confirmAction[SteamVR_Input_Sources.LeftHand].onChange -= UpdateActiveLaser;
