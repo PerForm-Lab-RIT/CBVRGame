@@ -99,7 +99,7 @@ namespace Core
             var index = 0;
             foreach (var trialType in customTrials)
             {
-                for (var j = 0; j < trialsPerType; j++)
+                for (var j = 0; j < trialsPerType && index < numTrials; j++)
                 {
                     trialSequence[index] = trialType;
                     index++;
