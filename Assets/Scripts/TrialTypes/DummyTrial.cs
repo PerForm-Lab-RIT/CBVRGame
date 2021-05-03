@@ -9,6 +9,7 @@ namespace TrialTypes
     public class DummyTrial : MonoBehaviour, ITrial
     {
         [SerializeField] private float waitTimeSeconds;
+        [SerializeField] private int repetitions;
 
         private int clickCount;
         private static readonly string[] ColumnNames = {"ClickCount"};
@@ -44,6 +45,11 @@ namespace TrialTypes
         public void LoadSettingsFromJson()
         {
             return;
+        }
+
+        public int GetNumRepetitions()
+        {
+            return repetitions;
         }
 
         public UXFDataRow RetrieveTrialData()

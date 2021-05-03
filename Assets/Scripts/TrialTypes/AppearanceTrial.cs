@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Core;
@@ -12,6 +13,7 @@ namespace TrialTypes
 {
     public class AppearanceTrial : MonoBehaviour, ITrial
     {
+        [SerializeField] private int repetitions;
         [SerializeField] private SelectEyeTracker eyeTrackerSelector;
         [SerializeField] private Transform cameraTransform;
         [SerializeField] private string promptText;
@@ -69,7 +71,8 @@ namespace TrialTypes
         private static readonly string[] JsonSettingNames =
         {
             "MinTargetPresentationTime", "MaxTargetPresentationTime", "TargetTimeout",
-            "DistanceFromCenterDegrees", "PolarAngle", "FixationTime", "MaxFixationError", "EnableSound"
+            "DistanceFromCenterDegrees", "PolarAngle", "FixationTime", "MaxFixationError", "EnableSound",
+            "Repetitions"
         };
         
         private Transform controllerTransform;
@@ -93,16 +96,21 @@ namespace TrialTypes
         public void LoadSettingsFromJson()
         {
             var settings = Session.instance.settings.GetDict(GetTrialName());
-            settings[JsonSettingNames[0]] = minTargetPresentationTime;
-            settings[JsonSettingNames[1]] = maxTargetPresentationTime;
-            settings[JsonSettingNames[2]] = targetTimeout;
-            settings[JsonSettingNames[3]] = distanceFromCenterDegrees;
-            settings[JsonSettingNames[4]] = polarAngle;
-            settings[JsonSettingNames[5]] = fixationTime;
-            settings[JsonSettingNames[6]] = maxFixationError;
-            settings[JsonSettingNames[7]] = enableSound;
+            minTargetPresentationTime = Convert.ToSingle(settings[JsonSettingNames[0]]);
+            maxTargetPresentationTime = Convert.ToSingle(settings[JsonSettingNames[1]]);
+            targetTimeout = Convert.ToSingle(settings[JsonSettingNames[2]]);
+            distanceFromCenterDegrees = Convert.ToSingle(settings[JsonSettingNames[3]]);
+            polarAngle = Convert.ToSingle(settings[JsonSettingNames[4]]);
+            fixationTime = Convert.ToSingle(settings[JsonSettingNames[5]]);
+            maxFixationError = Convert.ToSingle(settings[JsonSettingNames[6]]);
+            enableSound = Convert.ToBoolean(settings[JsonSettingNames[7]]);
         }
-        
+
+        public int GetNumRepetitions()
+        {
+            return repetitions;
+        }
+
         public IEnumerator Perform()
         {
             Initialize();

@@ -50,8 +50,18 @@ namespace Core
 
                 /*
                  * Function: LoadSettingsFromJson
-                 * Loads relevant settings from the JSON file loaded into UXF
+                 * Loads relevant settings from the JSON file loaded into UXF. When implementing, the dictionary
+                 * to pull from should always be from the string provided in GetTrialName.
+                 *
+                 * Example (Almost all implementations should start with this line):
+                 * var settingsDictionary = Session.instance.settings.GetDict(GetTrialName());
                  */
                 void LoadSettingsFromJson();
+                
+                /*
+                 * Function: GetNumRepetitions
+                 * Retrieves the number of total times this trial type should repeat
+                 */
+                int GetNumRepetitions();
         }
 }

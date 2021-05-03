@@ -13,14 +13,14 @@ namespace Core
     {
         [SerializeField] private GameObject trialsParent;
         [SerializeField] private float promptTime;
-        [SerializeField] private int numTrials;
         [SerializeField] private TextMeshPro promptText;
 
         private ITrial[] customTrials;
-        private ITrial[] trialSequence;
+        private List<ITrial> trialSequence;
         
         private Dictionary<ITrial, UXFDataTable> trialData;
         private ITrial currentTrial;
+        [SerializeField] [ReadOnly] private int numTrials;
         private int trialCount;
 
         public void OnValidate()
@@ -32,14 +32,13 @@ namespace Core
         {
             trialCount = 0;
             trialData = new Dictionary<ITrial, UXFDataTable>();
-            
-            GenerateTrialSequence();
 
             foreach (var trial in customTrials)
             {
                 trial.LoadSettingsFromJson();
             }
             
+            GenerateTrialSequence();
             var block = session.CreateBlock();
             block.CreateTrial();
             session.BeginNextTrial();
@@ -106,31 +105,28 @@ namespace Core
         
         private void GenerateTrialSequence()
         {
-            trialSequence = new ITrial[numTrials];
-            var trialsPerType = numTrials / customTrials.Length;
-
-            var index = 0;
+            trialSequence = new List<ITrial>();
+            
             foreach (var trialType in customTrials)
             {
-                for (var j = 0; j < trialsPerType && index < numTrials; j++)
+                for (var i = 0; i < trialType.GetNumRepetitions(); i++)
                 {
-                    trialSequence[index] = trialType;
-                    index++;
+                    trialSequence.Add(trialType);
                 }
             }
-
-            // Fill the last empty space randomly if odd number of trials
-            if (numTrials % 2 != 0)
-                trialSequence[trialSequence.Length - 1] = customTrials[Random.Range(0, customTrials.Length)];
-            
+            numTrials = trialSequence.Count;
             trialSequence.Shuffle();
         }
 
         public void GenerateTemplateJson()
         {
             var sessionDict = new Dictionary<string, object>();
-            foreach(var trial in customTrials)
+            
+            foreach (var trial in customTrials)
+            {
                 sessionDict.Add(trial.GetTrialName(), trial.GetTemplateSettings());
+            }
+
             var serializedJson = MiniJSON.Json.Serialize(sessionDict);
             File.WriteAllText("Assets/StreamingAssets/TEMPLATE.json", serializedJson);
         }

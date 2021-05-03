@@ -7,7 +7,7 @@
         "PolarAngle": 220,
         "FixationTime": 2,
         "MaxFixationError": 0.10000000149011612,
-        "EnableSound": false
+        "EnableSound": true
     },
     "SwingPlusSound": {
         "MinTargetPresentationTime": 0.5,
@@ -38,8 +38,5 @@
         "FixationTime": 2,
         "MaxFixationError": 0.10000000149011612,
         "EnableSound": false
-    },
-    "DummyTrial": {
-        
     }
 }
