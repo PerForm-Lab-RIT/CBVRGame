@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Core;
 using UnityEngine;
 using UXF;
@@ -33,6 +34,16 @@ namespace TrialTypes
         public string GetPromptText()
         {
             return "Click!";
+        }
+
+        public IDictionary GetTemplateSettings()
+        {
+            return new Dictionary<string, object>();
+        }
+
+        public void LoadSettingsFromJson()
+        {
+            return;
         }
 
         public UXFDataRow RetrieveTrialData()

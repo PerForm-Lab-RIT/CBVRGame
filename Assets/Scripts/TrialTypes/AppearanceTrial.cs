@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using Core;
 using EyeTracker;
@@ -64,8 +65,44 @@ namespace TrialTypes
 
         private float reactionTime;
         private static readonly string[] ColumnNames = { "ReactionTime", "FalseAlarm", "TimedOut" };
+
+        private static readonly string[] JsonSettingNames =
+        {
+            "MinTargetPresentationTime", "MaxTargetPresentationTime", "TargetTimeout",
+            "DistanceFromCenterDegrees", "PolarAngle", "FixationTime", "MaxFixationError", "EnableSound"
+        };
+        
         private Transform controllerTransform;
 
+        public IDictionary GetTemplateSettings()
+        {
+            var settingsDict = new Dictionary<string, object>
+            {
+                {JsonSettingNames[0], minTargetPresentationTime},
+                {JsonSettingNames[1], maxTargetPresentationTime},
+                {JsonSettingNames[2], targetTimeout},
+                {JsonSettingNames[3], distanceFromCenterDegrees},
+                {JsonSettingNames[4], polarAngle},
+                {JsonSettingNames[5], fixationTime},
+                {JsonSettingNames[6], maxFixationError},
+                {JsonSettingNames[7], enableSound}
+            };
+            return settingsDict;
+        }
+        
+        public void LoadSettingsFromJson()
+        {
+            var settings = Session.instance.settings.GetDict(GetTrialName());
+            settings[JsonSettingNames[0]] = minTargetPresentationTime;
+            settings[JsonSettingNames[1]] = maxTargetPresentationTime;
+            settings[JsonSettingNames[2]] = targetTimeout;
+            settings[JsonSettingNames[3]] = distanceFromCenterDegrees;
+            settings[JsonSettingNames[4]] = polarAngle;
+            settings[JsonSettingNames[5]] = fixationTime;
+            settings[JsonSettingNames[6]] = maxFixationError;
+            settings[JsonSettingNames[7]] = enableSound;
+        }
+        
         public IEnumerator Perform()
         {
             Initialize();

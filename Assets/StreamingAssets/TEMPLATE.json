@@ -1,0 +1,45 @@
+{
+    "PressPlusSound": {
+        "MinTargetPresentationTime": 0.5,
+        "MaxTargetPresentationTime": 3,
+        "TargetTimeout": 1,
+        "DistanceFromCenterDegrees": 20,
+        "PolarAngle": 220,
+        "FixationTime": 2,
+        "MaxFixationError": 0.10000000149011612,
+        "EnableSound": false
+    },
+    "SwingPlusSound": {
+        "MinTargetPresentationTime": 0.5,
+        "MaxTargetPresentationTime": 3,
+        "TargetTimeout": 1,
+        "DistanceFromCenterDegrees": 25,
+        "PolarAngle": 45,
+        "FixationTime": 2,
+        "MaxFixationError": 0.10000000149011612,
+        "EnableSound": true
+    },
+    "PressNoSound": {
+        "MinTargetPresentationTime": 0.5,
+        "MaxTargetPresentationTime": 3,
+        "TargetTimeout": 1,
+        "DistanceFromCenterDegrees": 25,
+        "PolarAngle": 45,
+        "FixationTime": 2,
+        "MaxFixationError": 0.10000000149011612,
+        "EnableSound": false
+    },
+    "SwingNoSound": {
+        "MinTargetPresentationTime": 0.5,
+        "MaxTargetPresentationTime": 3,
+        "TargetTimeout": 1,
+        "DistanceFromCenterDegrees": 25,
+        "PolarAngle": 45,
+        "FixationTime": 2,
+        "MaxFixationError": 0.10000000149011612,
+        "EnableSound": false
+    },
+    "DummyTrial": {
+        
+    }
+}

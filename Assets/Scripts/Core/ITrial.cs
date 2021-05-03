@@ -41,5 +41,17 @@ namespace Core
                  * Get the desired prompt text for display by a SessionManager.
                  */
                 string GetPromptText();
+
+                /*
+                 * Function: GetTemplateSettings
+                 * Get settings for writing out to the TEMPLATE json file
+                 */
+                IDictionary GetTemplateSettings();
+
+                /*
+                 * Function: LoadSettingsFromJson
+                 * Loads relevant settings from the JSON file loaded into UXF
+                 */
+                void LoadSettingsFromJson();
         }
 }

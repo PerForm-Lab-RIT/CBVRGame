@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UXF;
+using Random = UnityEngine.Random;
 
 namespace Core
 {
@@ -19,14 +22,24 @@ namespace Core
         private Dictionary<ITrial, UXFDataTable> trialData;
         private ITrial currentTrial;
         private int trialCount;
-        
-    
+
+        public void OnValidate()
+        {
+            customTrials = trialsParent.GetComponentsInChildren<ITrial>(true);
+        }
+
         public void BeginSession(Session session)
         {
             trialCount = 0;
             trialData = new Dictionary<ITrial, UXFDataTable>();
-            customTrials = trialsParent.GetComponentsInChildren<ITrial>(true);
+            
             GenerateTrialSequence();
+
+            foreach (var trial in customTrials)
+            {
+                trial.LoadSettingsFromJson();
+            }
+            
             var block = session.CreateBlock();
             block.CreateTrial();
             session.BeginNextTrial();
@@ -111,6 +124,15 @@ namespace Core
                 trialSequence[trialSequence.Length - 1] = customTrials[Random.Range(0, customTrials.Length)];
             
             trialSequence.Shuffle();
+        }
+
+        public void GenerateTemplateJson()
+        {
+            var sessionDict = new Dictionary<string, object>();
+            foreach(var trial in customTrials)
+                sessionDict.Add(trial.GetTrialName(), trial.GetTemplateSettings());
+            var serializedJson = MiniJSON.Json.Serialize(sessionDict);
+            File.WriteAllText("Assets/StreamingAssets/TEMPLATE.json", serializedJson);
         }
     }
 }
