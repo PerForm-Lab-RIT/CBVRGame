@@ -1,14 +1,11 @@
 ﻿using PupilLabs;
 using UnityEngine;
-using UXF;
 
 namespace EyeTracker
 {
     public class PupilLabsEyeTracker : MonoBehaviour, IEyeTracker
     {
-        [SerializeField] private RequestController requestController;
         [SerializeField] private GazeController gazeController;
-        [SerializeField] private RecordingController recordingController;
         [SerializeField] [Range(0,1)] private float confidenceThreshold;
 
         private Vector3 _localGazeDirection;
@@ -17,17 +14,7 @@ namespace EyeTracker
         {
             
             _localGazeDirection = Vector3.forward;
-            var customDataPath = Session.instance.ParticipantPath + "/PupilData/";
-            recordingController.SetCustomPath(customDataPath);
-            requestController.OnConnected += recordingController.StartRecording;
             gazeController.OnReceive3dGaze += ReceiveGaze;
-        }
-        
-        public void OnDisable()
-        {
-            
-            requestController.OnConnected -= recordingController.StartRecording;
-            gazeController.OnReceive3dGaze -= ReceiveGaze;
         }
         
         private void ReceiveGaze(GazeData gazeData)

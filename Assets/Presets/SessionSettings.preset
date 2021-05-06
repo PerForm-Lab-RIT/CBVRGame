@@ -1,0 +1,291 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SessionSettings
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: b94c9a6e9310de44fbe65be447a61470,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: sessionType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: cueType
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: feedbackType
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: numTrials
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationTime
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationDotRadius
+    value: 0.3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: skyColor.r
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: skyColor.g
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: skyColor.b
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: skyColor.a
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: stimulusDensity
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: dotSize
+    value: 14
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outerStimulusRadius
+    value: 45
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outerStimulusNoisePercentage
+    value: 100
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: innerStimulusRadius
+    value: 5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: innerStimulusSpawnRadius
+    value: 30
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: innerStimulusNoisePercentage
+    value: 50
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outerStimulusDuration
+    value: 5000
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: innerStimulusDuration
+    value: 500
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: stimulusDepth
+    value: 0.57
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: interTrialDelay
+    value: 2.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: stimulusSpacing
+    value: 0.0001
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.size
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[0]
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[1]
+    value: 40
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[2]
+    value: 80
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[3]
+    value: 120
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[4]
+    value: 160
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[5]
+    value: 200
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[6]
+    value: 240
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[7]
+    value: 280
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[8]
+    value: 320
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coherenceStaircase.Array.data[9]
+    value: 338
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: staircaseIncreaseThreshold
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: staircaseDecreaseThreshold
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: regionSlices
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: flipRegions
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: coarseAdjustEnabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: choosableAngles.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: choosableAngles.Array.data[0]
+    value: 90
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: choosableAngles.Array.data[1]
+    value: 270
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: attentionCueDuration
+    value: 1000
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: attentionCueDepth
+    value: 0.57
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: attentionCueDistance
+    value: 80
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: pulseFrequency
+    value: 12
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: sampleRate
+    value: 44100
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: angleErrorTolerance
+    value: 10
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: positionErrorTolerance
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: positionStaircaseEnabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: directionStaircaseEnabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationErrorTolerance
+    value: 8
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: minDotLifetime
+    value: 0.2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: maxDotLifetime
+    value: 0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: buddyDotsEnabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: outerStimulusStart
+    value: 1000
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: innerStimulusStart
+    value: 1000
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: attentionCueStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: inputStart
+    value: 1500
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: inputDuration
+    value: 4500
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationBreakCheckStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: fixationBreakCheckDuration
+    value: 1500
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: headFixationDistanceErrorTolerance
+    value: 0.1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: headFixationAngleErrorTolerance
+    value: 15
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: headFixationStart
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: headFixationDuration
+    value: 1500
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: timeoutIsFailure
+    value: 1
+    objectReference: {fileID: 0}

@@ -210,7 +210,7 @@ namespace TrialTypes
         
         private void Initialize()
         {
-            eyeTracker = eyeTrackerSelector.chosenTracker;
+            eyeTracker = eyeTrackerSelector.ChosenTracker;
             trialPlane.transform.SetParent(cameraTransform);
             trialPlane.transform.localPosition = new Vector3(0, 0, trialPlaneDepth);
             

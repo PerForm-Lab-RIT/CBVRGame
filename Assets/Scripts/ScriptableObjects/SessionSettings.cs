@@ -18,7 +18,8 @@ namespace ScriptableObjects
         public enum CueType
         {
             Neutral,
-            FeatureBased
+            FeatureBased,
+            StimulusBased
         }
 
         public enum FeedbackType
@@ -35,11 +36,12 @@ namespace ScriptableObjects
         public float fixationDotRadius;
         public Color skyColor;
         public float stimulusDensity;
-        public float dotLifetime;
         public float dotSize;
         public float outerStimulusRadius;
+        public float outerStimulusNoisePercentage;
         public float innerStimulusRadius;
         public float innerStimulusSpawnRadius;
+        public float innerStimulusNoisePercentage;
         public float outerStimulusDuration;
         public float innerStimulusDuration;
         public float stimulusDepth;
@@ -66,6 +68,24 @@ namespace ScriptableObjects
         public bool positionStaircaseEnabled;
         public bool directionStaircaseEnabled;
         public float fixationErrorTolerance;
+        public float minDotLifetime;
+        public float maxDotLifetime;
+        public bool buddyDotsEnabled;
+        public float outerStimulusStart;
+        public float innerStimulusStart;
+        public float attentionCueStart;
+
+        public float inputStart;
+        public float inputDuration;
+        public float fixationBreakCheckStart;
+        public float fixationBreakCheckDuration;
+
+        public float headFixationDistanceErrorTolerance;
+        public float headFixationAngleErrorTolerance;
+        public float headFixationStart;
+        public float headFixationDuration;
+
+        public bool timeoutIsFailure;
 
         // IMPORTANT: Any changes made in this function should be cross-checked with both the corresponding JSON
         // and the UXF data-points collection
@@ -74,19 +94,24 @@ namespace ScriptableObjects
             var sessionSettingsDict = Session.instance.settings.GetDict("SessionSettings");
             
             sessionType = ParseSessionType((string) Session.instance.participantDetails["SessionType"]);
-            cueType = ParseCueType((string) Session.instance.participantDetails["CueType"]);
+            cueType = ParseCueType((string) sessionSettingsDict["AttentionCueType"]);
             feedbackType = ParseFeedbackType((string) Session.instance.participantDetails["FeedbackType"]);
             numTrials = Convert.ToInt32(sessionSettingsDict["NumTrials"]);
-            fixationTime = Convert.ToSingle(sessionSettingsDict["FixationTimeInSeconds"]);
+            fixationTime = Convert.ToSingle(sessionSettingsDict["FixationTimeSeconds"]);
             fixationDotRadius = Convert.ToSingle(sessionSettingsDict["FixationDotRadiusDegrees"]);
             skyColor = ParseColor((List<object>) sessionSettingsDict["SkyColor"]);
             stimulusDensity = Convert.ToSingle(sessionSettingsDict["StimulusDensity"]);
-            dotLifetime = Convert.ToSingle(sessionSettingsDict["DotLifetimeSeconds"]);
+            minDotLifetime = Convert.ToSingle(sessionSettingsDict["MinDotLifetimeSeconds"]);
+            maxDotLifetime = Convert.ToSingle(sessionSettingsDict["MaxDotLifetimeSeconds"]);
             dotSize = Convert.ToSingle(sessionSettingsDict["StimulusDotSizeArcMinutes"]);
             outerStimulusRadius = Convert.ToSingle(sessionSettingsDict["OuterStimulusRadiusDegrees"]);
+            outerStimulusNoisePercentage = Convert.ToSingle(sessionSettingsDict["OuterStimulusNoisePercentage"]);
+            innerStimulusNoisePercentage = Convert.ToSingle(sessionSettingsDict["InnerStimulusNoisePercentage"]);
             innerStimulusRadius = Convert.ToSingle(sessionSettingsDict["InnerStimulusRadiusDegrees"]);
             innerStimulusSpawnRadius = Convert.ToSingle(sessionSettingsDict["InnerStimulusSpawnRadius"]);
+            outerStimulusStart = Convert.ToSingle(sessionSettingsDict["OuterStimulusStartMs"]);
             outerStimulusDuration = Convert.ToSingle(sessionSettingsDict["OuterStimulusDurationMs"]);
+            innerStimulusStart = Convert.ToSingle(sessionSettingsDict["InnerStimulusStartMs"]);
             innerStimulusDuration = Convert.ToSingle(sessionSettingsDict["InnerStimulusDurationMs"]);
             stimulusDepth = Convert.ToSingle(sessionSettingsDict["StimulusDepthMeters"]);
             interTrialDelay = Convert.ToSingle(sessionSettingsDict["InterTrialDelaySeconds"]);
@@ -104,7 +129,8 @@ namespace ScriptableObjects
             coarseAdjustEnabled = Convert.ToBoolean(sessionSettingsDict["CoarseAdjustment"]);
             choosableAngles = ParseFloatList((List<object>) sessionSettingsDict["ChoosableAngles"]);
 
-            attentionCueDuration = Convert.ToSingle(sessionSettingsDict["AttentionCueDuration"]);
+            attentionCueStart = Convert.ToSingle(sessionSettingsDict["AttentionCueStartMs"]);
+            attentionCueDuration = Convert.ToSingle(sessionSettingsDict["AttentionCueDurationMs"]);
             attentionCueDepth = Convert.ToSingle(sessionSettingsDict["AttentionCueDepth"]);
             attentionCueDistance = Convert.ToSingle(sessionSettingsDict["AttentionCueLengthDegrees"]);
             pulseFrequency = Convert.ToSingle(sessionSettingsDict["PulseFrequency"]);
@@ -113,10 +139,24 @@ namespace ScriptableObjects
             angleErrorTolerance = Convert.ToSingle(sessionSettingsDict["AngleErrorToleranceDegrees"]);
             positionErrorTolerance = Convert.ToSingle(sessionSettingsDict["PositionErrorToleranceDegrees"]);
             
-            positionStaircaseEnabled = Convert.ToBoolean(Session.instance.participantDetails["LocationalStaircaseEnabled"]);
-            directionStaircaseEnabled = Convert.ToBoolean(Session.instance.participantDetails["DirectionalStaircaseEnabled"]);
+            positionStaircaseEnabled = Convert.ToBoolean(sessionSettingsDict["EnableLocationalStaircase"]);
+            directionStaircaseEnabled = Convert.ToBoolean(sessionSettingsDict["EnableDirectionalStaircase"]);
             
             fixationErrorTolerance = Convert.ToSingle(sessionSettingsDict["FixationErrorToleranceRadiusDegrees"]);
+            buddyDotsEnabled = Convert.ToBoolean(sessionSettingsDict["EnableBuddyDots"]);
+            
+            inputStart = Convert.ToSingle(sessionSettingsDict["InputStartMs"]);
+            inputDuration = Convert.ToSingle(sessionSettingsDict["InputDurationMs"]);
+            fixationBreakCheckStart = Convert.ToSingle(sessionSettingsDict["FixationBreakCheckStartMs"]);
+            fixationBreakCheckDuration = Convert.ToSingle(sessionSettingsDict["FixationBreakCheckDurationMs"]);
+
+            headFixationDistanceErrorTolerance = Convert.ToSingle(sessionSettingsDict["HeadStabilityDistanceErrorToleranceM"]);
+            headFixationAngleErrorTolerance =
+                Convert.ToSingle(sessionSettingsDict["HeadStabilityAngleErrorToleranceDegrees"]);
+            headFixationStart = Convert.ToSingle(sessionSettingsDict["HeadStabilityCheckStartMs"]);
+            headFixationDuration = Convert.ToSingle(sessionSettingsDict["HeadStabilityCheckDurationMs"]);
+
+            timeoutIsFailure = Convert.ToBoolean(sessionSettingsDict["FailOnTimeout"]);
         }
 
         private static List<float> ParseFloatList(IEnumerable<object> list)
@@ -148,12 +188,14 @@ namespace ScriptableObjects
         
         private static CueType ParseCueType(string cueTypeString)
         {
-            switch (cueTypeString)
+            switch (char.ToLower(cueTypeString[0]))
             {
-                case "Neutral":
+                case 'n':
                     return CueType.Neutral;
-                case "Feature-based":
+                case 'f':
                     return CueType.FeatureBased;
+                case 's':
+                    return CueType.StimulusBased;
                 default:
                     return CueType.Neutral;
             }
@@ -161,11 +203,11 @@ namespace ScriptableObjects
         
         private static FeedbackType ParseFeedbackType(string feedbackTypeString)
         {
-            switch (feedbackTypeString)
+            switch (char.ToLower(feedbackTypeString[0]))
             {
-                case "Directional":
+                case 'd':
                     return FeedbackType.Directional;
-                case "Locational":
+                case 'l':
                     return FeedbackType.Locational;
                 default:
                     return FeedbackType.Directional;
