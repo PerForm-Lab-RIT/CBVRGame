@@ -66,6 +66,11 @@ namespace Core
                 StartCoroutine(TrialRoutine(uxfTrial));
             }
         }
+
+        public void ResumeTrial()
+        {
+            StartCoroutine(TrialRoutine(Session.instance.CurrentTrial));
+        }
     
         private IEnumerator TrialRoutine(Trial uxfTrial)
         {
