@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using ScriptableObjects;
 using TMPro;
+using UnityEditor.Experimental.TerrainAPI;
 using UnityEngine;
 using UXF;
 using Random = UnityEngine.Random;
@@ -14,6 +16,8 @@ namespace Core
         [SerializeField] private GameObject trialsParent;
         [SerializeField] private float promptTime;
         [SerializeField] private TextMeshPro promptText;
+        [SerializeField] private SessionSettings sessionSettings;
+        [SerializeField] private GameObject pauseUI;
 
         private ITrial[] customTrials;
         private List<ITrial> trialSequence;
@@ -22,6 +26,7 @@ namespace Core
         private ITrial currentTrial;
         [SerializeField] [ReadOnly] private int numTrials;
         private int trialCount;
+        private bool pauseBuffered;
 
         public void OnValidate()
         {
@@ -32,12 +37,16 @@ namespace Core
         {
             trialCount = 0;
             trialData = new Dictionary<ITrial, UXFDataTable>();
+            
+            Random.InitState(DateTime.Now.Millisecond);
+            sessionSettings.LoadFromUxfJson();
 
             foreach (var trial in customTrials)
             {
                 trial.LoadSettingsFromJson();
             }
             
+            HidePrompt();
             GenerateTrialSequence();
             var block = session.CreateBlock();
             block.CreateTrial();
@@ -47,7 +56,15 @@ namespace Core
         // Called from UXF Event
         public void BeginTrial(Trial uxfTrial)
         {
-            StartCoroutine(TrialRoutine(uxfTrial));
+            if (pauseBuffered)
+            {
+                pauseUI.SetActive(true);
+                pauseBuffered = false;
+            }
+            else
+            {
+                StartCoroutine(TrialRoutine(uxfTrial));
+            }
         }
     
         private IEnumerator TrialRoutine(Trial uxfTrial)
@@ -122,6 +139,7 @@ namespace Core
         {
             var sessionDict = new Dictionary<string, object>();
             
+            sessionDict.Add("SessionSettings", sessionSettings.GetSettingsDict());
             foreach (var trial in customTrials)
             {
                 sessionDict.Add(trial.GetTrialName(), trial.GetTemplateSettings());
@@ -129,6 +147,11 @@ namespace Core
 
             var serializedJson = MiniJSON.Json.Serialize(sessionDict);
             File.WriteAllText("Assets/StreamingAssets/TEMPLATE.json", serializedJson);
+        }
+
+        public void BufferPause()
+        {
+            pauseBuffered = true;
         }
     }
 }

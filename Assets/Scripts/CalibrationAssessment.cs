@@ -66,7 +66,7 @@ public class CalibrationAssessment : MonoBehaviour
         }
         _targetRenderers[0].enabled = true;
         _targetIdx = 0;
-        targetDistance = settings.stimulusDepth;
+        targetDistance = settings.focusDepth;
         CurrentTargetTransform = GETTargTransformByIndex(0);
         
         RepositionTargets();
