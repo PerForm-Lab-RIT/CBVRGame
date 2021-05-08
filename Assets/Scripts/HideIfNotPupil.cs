@@ -1,5 +1,4 @@
-﻿using System;
-using ScriptableObjects;
+﻿using ScriptableObjects;
 using UnityEngine;
 using UXF;
 

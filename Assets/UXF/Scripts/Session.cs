@@ -210,7 +210,7 @@ namespace UXF
         /// <summary>
         /// The path in which the experiment data are stored.
         /// </summary>
-        public string BasePath { get; private set; }
+        public string BasePath { get; set; }
 
         /// <summary>
         /// Path to the folder used for reading settings and storing the output. 

@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using PupilLabs;
 using ScriptableObjects;
 using TMPro;
-using UnityEditor.Experimental.TerrainAPI;
 using UnityEngine;
+using UnityEngine.UI;
 using UXF;
 using Random = UnityEngine.Random;
 
@@ -18,6 +19,9 @@ namespace Core
         [SerializeField] private TextMeshPro promptText;
         [SerializeField] private SessionSettings sessionSettings;
         [SerializeField] private GameObject pauseUI;
+        [SerializeField] private Text infoText;
+        [SerializeField] private CalibrationController calibrationController;
+        [SerializeField] private SelectEyeTracker eyeTracker;
 
         private ITrial[] customTrials;
         private List<ITrial> trialSequence;
@@ -40,11 +44,14 @@ namespace Core
             
             Random.InitState(DateTime.Now.Millisecond);
             sessionSettings.LoadFromUxfJson();
+            pauseBuffered = true;
 
             foreach (var trial in customTrials)
             {
                 trial.LoadSettingsFromJson();
             }
+            
+            eyeTracker.SelectFromUxf();
             
             HidePrompt();
             GenerateTrialSequence();
@@ -69,6 +76,7 @@ namespace Core
 
         public void ResumeTrial()
         {
+            pauseBuffered = false;
             StartCoroutine(TrialRoutine(Session.instance.CurrentTrial));
         }
     
@@ -157,6 +165,40 @@ namespace Core
         public void BufferPause()
         {
             pauseBuffered = true;
+        }
+        
+        public void CalibratePupilLabs()
+        {
+            if (calibrationController.subsCtrl.IsConnected)
+            {
+                calibrationController.StartCalibration();
+                calibrationController.OnCalibrationSucceeded += CalibrationSuccessful;
+                calibrationController.OnCalibrationFailed += CalibrationFailed;
+                pauseUI.SetActive(false);
+                infoText.gameObject.SetActive(false);
+            }
+            else
+            {
+                infoText.text =
+                    "PupilLabs tracker disconnected!\n If the tracker was selected in the JSON settings, ensure Pupil Capture is running and try again.";
+                infoText.color = Color.red;
+            }
+        }
+
+        private void CalibrationSuccessful()
+        {
+            pauseUI.SetActive(true);
+            infoText.gameObject.SetActive(true);
+            infoText.text = "Calibration successful!";
+            infoText.color = Color.green;
+        }
+    
+        private void CalibrationFailed()
+        {
+            pauseUI.SetActive(true);
+            infoText.gameObject.SetActive(true);
+            infoText.text = "Calibration failed.\n Ensure that Pupil Capture is running with both eye cameras!";
+            infoText.color = Color.red;
         }
     }
 }

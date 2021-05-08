@@ -4,7 +4,7 @@
         "FocusDepthMeters": 2,
         "HeadFixationDistanceErrorToleranceMeters": 0.5,
         "HeadFixationAngleErrorToleranceDegrees": 5,
-        "EyeTracker": "Dummy"
+        "EyeTracker": "PupilLabs"
     },
     "PressPlusSound": {
         "MinTargetPresentationTime": 0.5,

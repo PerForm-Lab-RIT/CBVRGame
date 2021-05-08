@@ -41,6 +41,7 @@ namespace PupilLabs
 
         void Update()
         {
+            /*
             if (Input.GetKeyDown(KeyCode.R))
             {
                 if (IsRecording)
@@ -52,6 +53,7 @@ namespace PupilLabs
                     startRecording = true;
                 }
             }
+            */
 
             if (startRecording)
             {
