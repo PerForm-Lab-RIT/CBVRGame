@@ -20,6 +20,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "RecordToggle",
+                    "type": "Value",
+                    "id": "eddbed40-7940-4771-9e92-d76414ee336e",
+                    "expectedControlType": "DiscreteButton",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -42,6 +50,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8df692ec-0ff8-4953-987d-ad1fc6205c9c",
+                    "path": "<Keyboard>/#(R)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RecordToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

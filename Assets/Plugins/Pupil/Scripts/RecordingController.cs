@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace PupilLabs
 {
@@ -17,6 +18,8 @@ namespace PupilLabs
         [SerializeField] private bool recordEyeFrames = true;
         [SerializeField] private bool startRecording;
         [SerializeField] private bool stopRecording;
+        [SerializeField] private InputActionReference recordToggle;
+        [SerializeField] private GameObject recordingIndicator;
 
         public bool IsRecording { get; private set; }
 
@@ -29,6 +32,7 @@ namespace PupilLabs
                 return;
             }
 
+            recordToggle.action.performed += ToggleRecording;
         }
 
         void OnDisable()
@@ -37,33 +41,17 @@ namespace PupilLabs
             {
                 StopRecording();
             }
+            recordToggle.action.performed -= ToggleRecording;
         }
 
-        void Update()
+        void ToggleRecording(InputAction.CallbackContext context)
         {
-            /*
-            if (Input.GetKeyDown(KeyCode.R))
+            if (!IsRecording)
             {
-                if (IsRecording)
-                {
-                    stopRecording = true;
-                }
-                else
-                {
-                    startRecording = true;
-                }
-            }
-            */
-
-            if (startRecording)
-            {
-                startRecording = false;
                 StartRecording();
-            }
-
-            if (stopRecording)
+            } 
+            else if (IsRecording)
             {
-                stopRecording = false;
                 StopRecording();
             }
         }
@@ -88,7 +76,7 @@ namespace PupilLabs
                 return;
             }
 
-
+            recordingIndicator.SetActive(true);
             var path = GetRecordingPath();
 
             requestCtrl.Send(new Dictionary<string, object>
@@ -97,10 +85,10 @@ namespace PupilLabs
                 , { "session_name", path }
                 , { "record_eye",recordEyeFrames}
             });
-            IsRecording = true;
 
             //abort process on disconnecting
             requestCtrl.OnDisconnecting += StopRecording;
+            IsRecording = true;
         }
 
         public void StopRecording()
@@ -116,9 +104,10 @@ namespace PupilLabs
                 { "subject", "recording.should_stop" }
             });
 
-            IsRecording = false;
+            recordingIndicator.SetActive(false);
 
             requestCtrl.OnDisconnecting -= StopRecording;
+            IsRecording = false;
         }
 
         public void SetCustomPath(string path)
