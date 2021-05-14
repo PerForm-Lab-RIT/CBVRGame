@@ -4,31 +4,39 @@ using Core;
 using UXF;
 using System.Collections.Generic;
 using System;
+using Random = UnityEngine.Random;
 
 public class ColorTrial : MonoBehaviour, ITrial
 {
     [SerializeField] private GameObject sphere;
+    [SerializeField] private Color[] colors;
     [SerializeField] private float presentationDelay;
     [SerializeField] private int numRepetitions;
+    private static readonly string[] ColumnNames = { "PresentationTime" };
 
-    /*
-    public IDictionary GetTemplateSettings()
+    public IEnumerator Perform()
     {
-        var settings = new Dictionary<string, object>
-        {
-            { "PresentationDelay", presentationDelay },
-            { "NumRepetitions", numRepetitions }
-        };
-        return settings;
+        sphere.GetComponent<MeshRenderer>().material.color = colors[Random.Range(0, colors.Length)];
+        sphere.SetActive(true);
+        yield return new WaitForSeconds(presentationDelay);
+        sphere.SetActive(false);
     }
 
-    public void LoadSettingsFromJson()
+
+
+
+
+
+
+    public string[] GetColumnNames()
     {
-        var settingsDictionary = Session.instance.settings.GetDict(GetTrialName());
-        presentationDelay = Convert.ToSingle(settingsDictionary["PresentationDelay"]);
-        numRepetitions = Convert.ToInt32(settingsDictionary["NumRepetitions"]);
+        return ColumnNames;
     }
-    */
+
+    public UXFDataRow RetrieveTrialData()
+    {
+        return new UXFDataRow { (ColumnNames[0], presentationDelay) };
+    }
 
     public IDictionary GetTemplateSettings()
     {
@@ -60,27 +68,5 @@ public class ColorTrial : MonoBehaviour, ITrial
     public int GetNumRepetitions()
     {
         return numRepetitions;
-    }
-
-    public IEnumerator Perform()
-    {
-        // Updating the properties of the sphere will eventually be done here
-        sphere.SetActive(true);
-        yield return new WaitForSeconds(presentationDelay);
-        sphere.SetActive(false);
-    }
-
-    
-    
-    public string[] GetColumnNames()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    
-
-    public UXFDataRow RetrieveTrialData()
-    {
-        throw new System.NotImplementedException();
     }
 }

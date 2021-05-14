@@ -121,7 +121,8 @@ have it visible when we need it in the script (we'll go over how that's done in 
 
 ![SphereEditor](Doc/Gifs/SphereInspector.gif)
 
-Back in the ColorTrial script, add a SerializedField where the Sphere GameObject will eventually go.
+Set the Z position of the sphere to 2 so that the sphere will be visible in front of
+the camera when it appears. Back in the ColorTrial script, add a SerializedField where the Sphere GameObject will eventually go.
 
 ![SerializedSphere](Doc/Gifs/SerializedSphere.gif)
 
@@ -171,4 +172,67 @@ Note that it will also be necessary to cast or convert each setting to their cor
 
 ### 9. Define methods related to data export
 In the SessionManager, when a trial type finishes its Perform Coroutine, the SessionManager will then call
-the trial types RetrieveTrialData method 
+the trial type's RetrieveTrialData method. It's recommended to define the data output columns right in the trial type
+class itself using a static readonly member, for example:
+
+```
+private static readonly string[] ColumnNames = { "Column1", "Column2", ... };
+```
+
+The return type of the RetrieveTrialData method is a UXFDataRow. The best way to structure the row is to create
+one in the method and provide a list of tuples utilizing the column names declared in the class. The first element in each
+tuple should always be a string, while the second element is any string-convertible object. For the sake of brevity,
+this example will only record the trial presentation time which remains the same across every trial.
+
+![DataOutput](Doc/Gifs/DataOutput.gif)
+
+### 10. Assign values/objects in the Inspector
+One of the last things we need to do before seeing our basic trial in action is to assign our default values
+and used GameObjects in the inspector. Here we can insert the sphere we created earlier as well as set
+the presentation delay and number of trial repetitions we want.
+
+![InspectorAssignment](Doc/Gifs/InspectorAssignment.gif)
+
+### 11. Generate template JSON
+We need to generate an appropriate JSON file after modifying the trial types under the Trials GameObject. To do this,
+simply select the SessionManager in the Hierarchy (it's under -----MAIN SCRIPTS----- in the TutorialScene) and click the "Generate Template JSON"
+button. The generated TEMPLATE.json file will be in the StreamingAssets folder of your project.
+
+![GenerateTemplate](Doc/Gifs/GenerateTemplate.gif)
+
+### 12. Run the session!
+Everything is now set up to test the trial in action. Start play mode, enter the appropriate UXF details,
+and, if everything was done correctly, you should see the prompt text appear, then the sphere! It will run the number
+of times "Num Repetitions" is specified on the trial type settings in the JSON file you select.
+
+![TrialTest](Doc/Gifs/TrialTest.gif)
+
+Hmm... The color isn't changing. Let's fix that!
+
+### 13. Randomly change the color of the sphere between trials
+First, create a new unlit material (any color), select the Sphere object in the Hierarchy, and assign
+the new material to your sphere.
+
+![SphereMaterial](Doc/Gifs/SphereMaterial.gif)
+
+Next, back in the ColorTrial script, add a SerializedField of a Color array. We can choose a random color from
+the color array by utilizing Unity's Random.Range function. We simply return a random integer between 0 and the size
+of the color array at the start of each trial so that we get the desired effect we want. We assign this chosen color
+to the sphere's material on its MeshRenderer.
+
+![RandomizeColor](Doc/Gifs/RandomizeColor.gif)
+
+The last thing we need to do is assign some colors! I go for the simple RGB approach but you can choose any number
+of any colors you want.
+
+![ChooseColors](Doc/Gifs/ChooseColors.gif)
+
+### 14. That's it!
+In this tutorial you've learned how to set up a new trial using the ITrial interface with a bit of randomization.
+Hopefully this acts as a good entry point to creating more complicated trial types. To see more examples of implemented trials,
+check the Assets/Prefabs/TrialTypes and the Assets/Scripts/TrialTypes folders.
+
+![FinalTrial](Doc/Gifs/FinishedTrial.gif)
+
+At the end of the session, each trial type has its own csv file where the output data is placed. This data is in the designated
+save directory specified in UXF and is organized by participant and session number.
